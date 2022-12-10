@@ -14,6 +14,7 @@ public class Producto {
     private String precio;
 
     private String impuesto;
+    private String categoria;
 
     private int stock;
     @Id
@@ -57,5 +58,13 @@ public class Producto {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+    @Column(name = "CATEGORIA")
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

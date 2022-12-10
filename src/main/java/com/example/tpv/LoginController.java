@@ -2,6 +2,7 @@ package com.example.tpv;
 
 import com.example.tpv.modelos.Usuario;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -12,9 +13,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
     private static EntityManager manager;
     private static EntityManagerFactory emf;
@@ -28,7 +32,7 @@ public class LoginController {
     private Label txtAcceso;
 
     @FXML
-    protected void onBtnLogin() {
+    protected void onBtnLogin() throws IOException {
 
      /*   List<Usuario> lista =(List<Usuario>) TPVApplication.manager.createQuery("FROM USUARIOS").getResultList();
         System.out.println(lista);
@@ -37,14 +41,12 @@ public class LoginController {
         q.setParameter("user",user.getText());
         q.setParameter("pass",password.getText());
         Usuario usuario =(Usuario)q.getResultList().get(0);
-        if(usuario.getAdmin()==true){
-            txtAcceso.setText("Acceso permitido MODO ADMIN");
-        }
-        if(usuario.getAdmin()==false){
-            txtAcceso.setText("Acceso permitido MODO USUARIO");
-        }
+        TPVApplication.changeScene("main-view.fxml", usuario);
 
+    }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 }
