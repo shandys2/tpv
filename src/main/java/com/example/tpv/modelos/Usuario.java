@@ -1,28 +1,27 @@
-package com.example.tpv;
-import lombok.Getter;
-import lombok.Setter;
+package com.example.tpv.modelos;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Entity
-@Table(name = "Usuario")
+@Entity(name ="USUARIOS")
+@Table(name = "USUARIOS")
+
 public class Usuario {
+
+    private int userId;
+
+    private String username;
+
+    private String password;
+
+    private Boolean admin;
+
+    public Usuario(){}
+
     @Id
     @GeneratedValue
     @Column(name = "USERID", unique = true , nullable = false )
-    public int userId;
-    @Column(name = "USERNAME")
-    public String username;
-    @Column(name = "PASSWORD")
-    public String password;
-    @Column(name = "ADMIN")
-    public Boolean admin;
-
-    public Usuario(){}
-    @Column(name = "userid")
     public int getUserId() {
         return userId;
     }
@@ -31,7 +30,7 @@ public class Usuario {
         this.userId = userId;
     }
 
-    @Column(name = "username")
+    @Column(name = "USERNAME", unique = true , nullable = false)
     public String getUser() {
         return username;
     }
@@ -39,7 +38,7 @@ public class Usuario {
     public void setUser(String user) {
         this.username = user;
     }
-    @Column(name = "password")
+    @Column(name = "PASSWORD", nullable = false)
     public String getPass() {
         return password;
     }
@@ -47,7 +46,7 @@ public class Usuario {
     public void setPass(String pass) {
         this.password = pass;
     }
-    @Column(name = "admin")
+    @Column(name = "ADMIN", nullable = false)
     public Boolean getAdmin() {
         return admin;
     }

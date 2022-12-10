@@ -7,8 +7,8 @@
     <persistence-unit name="aplicacion" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-        <class>com.example.tpv.Usuario</class>
-        <class>com.example.tpv.Producto</class>
+        <class>com.example.tpv.modelos.Usuario</class>
+        <class>com.example.tpv.modelos.Producto</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

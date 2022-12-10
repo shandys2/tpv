@@ -10,5 +10,7 @@ module com.example.tpv {
     opens com.example.tpv to javafx.fxml;
 
     exports com.example.tpv;
-  //  opens com.example.tpv.Producto;
+    exports com.example.tpv.modelos;
+    opens com.example.tpv.modelos to javafx.fxml;
+    //  opens com.example.tpv.modelos.Producto;
 }
