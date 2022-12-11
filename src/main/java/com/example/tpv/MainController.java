@@ -143,12 +143,19 @@ public class MainController implements Initializable {
                     int i=0;
                     for (RowPedido p:pedidos) {
                         System.out.println(p.getNombre() + " ** "+ p.getCantidad());
+                        System.out.println("p.getNombre()" + p.getNombre());
+                        System.out.println("button.getTooltip().getText()"+ button.getTooltip().getText());
+                        String nombre= p.getNombre();
+                        String tooltip= button.getTooltip().getText();
+
 
                         if(p.getNombre().equals(button.getTooltip().getText())){
                             nuevaCantidad= Integer.valueOf(p.getCantidad())+1;
                             System.out.println("nueva cantidad:  "+nuevaCantidad);
                             existeProducto=true;
                             indice=i;
+                            break;
+
 
                         }else {
                             System.out.println("no esta");
