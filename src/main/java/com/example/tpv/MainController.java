@@ -64,6 +64,14 @@ public class MainController implements Initializable {
 
         Stage stage= TPVApplication.stagePrimary;
 
+        //CONFIGURACION DE LA TABLA PRODUCTOS
+
+        pedidos= FXCollections.observableArrayList();
+
+        this.colNombre.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.colPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
+        this.colCantidad.setCellValueFactory(new PropertyValueFactory("cantidad"));
+
 
         //COMPROBACION DE USUARIO
         Usuario usuario= (Usuario) stage.getUserData();
@@ -77,7 +85,16 @@ public class MainController implements Initializable {
             btnUsuarios.setVisible(false);
         }
 
-       //CONFIGURACION DE PRODUCTOS
+        List<String> imagenes= new ArrayList<>();
+        imagenes.add("agregar");
+        imagenes.add("borrar");
+        imagenes.add("editar");
+        imagenes.add("cliente");
+        imagenes.add("nuevo");
+        imagenes.add("agregar-usuario");
+
+
+        //CONFIGURACION DE PRODUCTOS
         Query q =TPVApplication.manager.createQuery("FROM PRODUCTOS");
         List<Producto> productos=q.getResultList();
         categorias= new ArrayList<>();
@@ -87,12 +104,79 @@ public class MainController implements Initializable {
             if(categorias.indexOf(p.getCategoria())==-1)
               categorias.add(p.getCategoria());
         }
-      listCategorias.getItems().addAll(categorias);
-      listCategorias.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+       listCategorias.getItems().addAll(categorias);
+       listCategorias.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
           @Override
           public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
               String current=listCategorias.getSelectionModel().getSelectedItem();
               System.out.println("seleccion -> " +current);
+              scrollAnchorPane.getChildren().clear();
+              int vertical=0;
+              int i=0;
+
+        for (String imagen:imagenes) {
+            Image imgTest = new Image(getClass().getResourceAsStream("/img/"+imagen+".png"));
+            ImageView viewTest = new ImageView(imgTest);
+            viewTest.setFitHeight(80);
+            viewTest.setPreserveRatio(true);
+            Button button = new Button();
+            //controlamos si ha llegado al final de la linea
+            if(i==500){ // 5 elementos, 100 px por cada uno
+                System.out.println("fin linea");
+                i=0;
+                vertical=100;
+            }
+            button.setLayoutX(i);
+            button.setLayoutY(vertical);
+            button.setPrefSize(96, 100);
+            button.setGraphic(viewTest);
+            button.setTooltip(new Tooltip(imagen));
+            button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    System.out.println(button.getTooltip().getText());
+                    RowPedido pedido= new RowPedido(button.getTooltip().getText(),"1.20","1");
+
+                    Boolean existeProducto=false;
+                    int nuevaCantidad=0;
+                    int indice=0;
+                    int i=0;
+                    for (RowPedido p:pedidos) {
+                        System.out.println(p.getNombre() + " ** "+ p.getCantidad());
+
+                        if(p.getNombre().equals(button.getTooltip().getText())){
+                            nuevaCantidad= Integer.valueOf(p.getCantidad())+1;
+                            System.out.println("nueva cantidad:  "+nuevaCantidad);
+                            existeProducto=true;
+                            indice=i;
+
+                        }else {
+                            System.out.println("no esta");
+                            existeProducto=false;
+                        }
+                        i++;
+                    }
+
+                    if(existeProducto){
+                        System.out.println("EXISTE");
+
+                            pedidos.remove(indice);
+                            RowPedido nuevoPedido= new RowPedido(pedido.getNombre(), pedido.getPrecio(), String.valueOf(nuevaCantidad));
+                            pedidos.add(nuevoPedido);
+
+                          // tableProductos.getItems().clear();
+                    }else {
+                        System.out.println("NO EXISTE");
+                        pedidos.add(pedido);
+                    }
+
+                    tableProductos.setItems(pedidos);
+                }
+            });
+            scrollAnchorPane.getChildren().add(button);
+            //controlamos el ancho
+           i=i+100;
+        }
           }
       });
 
@@ -120,18 +204,34 @@ public class MainController implements Initializable {
         btnInventario.setGraphic(viewInventario);
         btnUsuarios.setGraphic(viewUsuarios);
 
-        List<String> imagenes= new ArrayList<>();
-        imagenes.add("agregar");
-        imagenes.add("borrar");
-        imagenes.add("editar");
-        imagenes.add("cliente");
-        imagenes.add("nuevo");
-        imagenes.add("agregar-usuario");
+
+      Image imgTest = new Image(getClass().getResourceAsStream("/img/"+productos.get(4).getNombre()+".png"));
+        ImageView viewTest = new ImageView(imgTest);
+        viewTest.setFitHeight(80);
+        viewTest.setPreserveRatio(true);
+        Button button = new Button();
+
+
+        button.setLayoutX(0);
+        button.setLayoutY(0);
+        button.setPrefSize(96, 100);
+        button.setGraphic(viewTest);
+        button.setTooltip(new Tooltip(productos.get(4).getNombre()));
+        button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println(button.getTooltip().getText());
+
+            }
+        });
+        scrollAnchorPane.getChildren().add(button);
+        //controlamos el ancho
+
 
         int vertical=0;
         int i=0;
 
-        for (String imagen:imagenes) {
+   /*     for (String imagen:imagenes) {
             Image imgTest = new Image(getClass().getResourceAsStream("/img/"+imagen+".png"));
             ImageView viewTest = new ImageView(imgTest);
             viewTest.setFitHeight(80);
@@ -158,19 +258,8 @@ public class MainController implements Initializable {
             //controlamos el ancho
            i=i+100;
         }
-
-
+        */
         //CONFIGURACION DE LA TABLA PRODUCTOS
-
-        pedidos= FXCollections.observableArrayList();
-
-        this.colNombre.setCellValueFactory(new PropertyValueFactory("nombre"));
-        this.colPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
-        this.colCantidad.setCellValueFactory(new PropertyValueFactory("cantidad"));
-
-        RowPedido pedido= new RowPedido("coca-cola","precio","3");
-        pedidos.add(pedido);
-        tableProductos.setItems(pedidos);
 
 
     }
